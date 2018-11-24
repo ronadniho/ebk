@@ -1,0 +1,89 @@
+
+table tbody > tr > td > .edit {
+  position: relative;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+table tbody > tr > td > .edit .el-row:before {
+  display: inline;
+}
+
+table tbody > tr > td > .edit .el-col {
+  //height: 100%;
+  //line-height: 29px;
+  font-size: 18px;
+}
+
+table tbody > tr > td > .edit .edit-date {
+  height: 29px;
+  margin-bottom: 20px;
+}
+
+table tbody > tr > td > .edit .edit-cut-price {
+  height: 29px;
+  margin-bottom: 13px;
+}
+
+table tbody > tr > td > .edit .edit-che-price {
+  height: 43px;
+  margin-bottom: 9px;
+}
+
+table tbody > tr > td > .edit .edit-che-price .title {
+  line-height: 43px;
+}
+
+table tbody > tr > td > .edit .edit-che-price .el-col {
+  height: 43px;
+  line-height: 43px;
+}
+
+table tbody > tr > td > .edit .edit-che-price .el-input {
+  height: 100%;
+}
+
+table tbody > tr > td > .edit .edit-che-price .el-input input {
+  height: 100%;
+}
+
+table tbody > tr > td > .edit .edit-status {
+  margin-bottom: 30px;
+  height: 32px;
+}
+
+table tbody > tr > td > .edit .edit-status .title {
+  color: $--title-pricker--danger;
+  line-height: 32px;
+}
+
+table tbody > tr > td > .edit .edit-btn-group {
+  color: $--title-pricker--danger;
+  line-height: 30px;
+  height: 30px;
+  position: absolute;
+  bottom: 20px;
+}
+table tbody > tr > td > .edit .edit-btn-group .el-col  {
+  height: 100%;
+  text-align: left;
+}
+table tbody > tr > td > .edit .edit-btn-group .el-button {
+  width: 80px;
+  height: 100%;
+  line-height: 30px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+table tbody > tr > td > .edit .title {
+  color: $--title-pricker--success;
+  text-align: left;
+}
+
+table tbody > tr > td > .edit .val {
+  text-align: left;
+  color: rgba(51, 51, 51, 1);
+}
+
+

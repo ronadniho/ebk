@@ -1,0 +1,70 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  font-family: Roboto;
+  width: 100%;
+  height: 100%;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.btn-warning:not(.is-circle) {
+  padding: 0 25px;
+  height: 30px;
+  line-height: 30px;
+  border: 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: #fff;
+  background-color: $--btn--warning;
+}
+
+.btn-success:not(.is-circle) {
+   padding: 0 25px;
+   height: 30px;
+   line-height: 30px;
+   border: 0;
+   border-radius: 4px;
+   box-sizing: border-box;
+   color: #fff;
+   background-color: $--btn--success;
+ }
+
+.btn-success.is-circle {
+  color: #fff;
+  background-color: $--btn--success;
+}
+
+.btn-success-space {
+  padding: 0 25px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: $--btn--success;
+  border-color: $--btn--success;
+  background-color: #fff;
+}
+
+.btn-danger-space {
+  padding: 0 25px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid $--btn--danger;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: $--btn--danger;
+  background-color: #fff;
+}
