@@ -1,27 +1,48 @@
-.login{
-  .el-input--small{
-    .el-input__inner{
+.login {
+  .el-input--small {
+    .el-input__inner {
       height: 50px;
       -webkit-border-radius: 8px;
       -moz-border-radius: 8px;
       border-radius: 8px;
     }
   }
-  .el-input__suffix{
+  .el-input__suffix {
     line-height: 50px;
   }
 }
 
-
-
-.el-button:focus, .el-button:hover {
-  color: $--btn--success;
-  border-color: $--btn--success;
-  background-color: $--btn--success-active;
-}
-
+//.el-button:focus, .el-button:hover {
+//  color: $--btn--success;
+//  border-color: $--btn--success;
+//  background-color: $--btn--success-active;
+//}
 
 .el-input.is-active .el-input__inner, .el-input__inner:focus {
   border-color: $--btn--success;
   outline: 0;
+}
+
+.el-date-table td.today span {
+  color: $--color-primary;
+}
+
+.el-date-table td.current:not(.disabled) span {
+  color: #fff;
+  background-color: $--color-primary;
+}
+.el-date-table td.available:hover {
+  color: $--color-primary;
+}
+.el-date-picker__header-label.active, .el-date-picker__header-label:hover {
+  color: $--color-primary;
+}
+.el-year-table td .cell:hover, .el-year-table td.current:not(.disabled) .cell {
+  color:$--color-primary;
+}
+.el-picker-panel__icon-btn:hover {
+  color: $--color-primary;
+}
+.el-month-table td .cell:hover, .el-month-table td.current:not(.disabled) .cell {
+  color: $--color-primary;
 }

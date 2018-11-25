@@ -3,18 +3,19 @@
 import Vue from 'vue'
 import router from './router'
 import store from './store'
-Vue.config.productionTip = false
-import Element from 'element-ui';
+import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(Element, { size: 'small', zIndex: 3000 });
 import '@/style/index.scss'
 import App from './App'
-Vue.use(Element);
+
+Vue.config.productionTip = false
+Vue.use(ElementUI, {size: 'small', zIndex: 3000, locale});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   store,
   router,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

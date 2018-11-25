@@ -148,7 +148,7 @@
     </el-row>
     <el-row>
       <el-col :span="7">
-        <el-button @click="handleCancel">Cancel</el-button>
+        <el-button class="btn-success-space" @click="handleCancel">Cancel</el-button>
         <el-button class="btn-warning" @click="handleSubmitPriceList">Submit</el-button>
       </el-col>
     </el-row>
@@ -164,13 +164,14 @@
   import Cookie from 'js-cookie'
 
   export default {
+    props:['origin'],
     data() {
       return {
         props: {
           actionType: {
             type: String,
             default: ''
-          },
+          }
         },
         pickerOptionsStart: {
           disabledDate: (time) => {
@@ -239,9 +240,12 @@
       this.handlePushPriceItem();
     },
     computed: {
-      ...mapGetters([
-        'myHotelPrice'
-      ])
+      // ...mapGetters([
+      //   'myHotelPrice'
+      // ]),
+      myHotelPrice(){
+        return this.origin;
+      }
     },
     methods: {
       checkStatus(type, callback) {
@@ -501,8 +505,9 @@
       handleCancel() {
         if (this.myHotelPrice == 'add') {
           this.$router.go(-1);
-        } else if (this.myHotelPrice == 'update') {
-          this.$emit('close', false);
+        }
+        else if (this.myHotelPrice == 'update') {
+          this.$emit('APFclose', false);
         }
       }
     }
@@ -615,6 +620,7 @@
 
   .action {
     .el-col {
+      text-align: left;
       height: 40px;
     }
   }

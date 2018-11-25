@@ -3,6 +3,7 @@
     <el-row class="myHotel-dataPricker">
       <div class="myHotel-title">Current Price</div>
 
+      <!--条件选择-->
       <el-row>
         <el-col :span="6" class="title">Choose the room</el-col>
         <el-col :span="18">
@@ -22,27 +23,47 @@
         <el-col :span="6">
           <el-row class="year">
             <el-col :span="4">
-              <button class="iconfont" @click="handlePrev" :class="{'disabled':actionBtnStatus.prevBtn}">&#xe622;</button>
+              <button
+                class="iconfont"
+                @click="handlePrev"
+                :class="{'disabled':actionBtnStatus.prevBtn}">&#xe622;
+              </button>
             </el-col>
             <el-col :span="16">{{currentDate}}</el-col>
             <el-col :span="4">
-              <button class="iconfont" @click="handleNext" :class="{'disabled':actionBtnStatus.nextBtn}">&#xe618;</button>
+              <button
+                class="iconfont"
+                @click="handleNext"
+                :class="{'disabled':actionBtnStatus.nextBtn}">&#xe618;
+              </button>
             </el-col>
           </el-row>
         </el-col>
         <el-col :span="9">
-          <el-button class="btn-warning">Batch modification price</el-button>
+          <button
+            class="btn-warning"
+            @click="handleAPFshow"
+          >Batch modification price
+          </button>
+          <!--批量添加价格组件-->
+          <div class="add-price-form" v-if="addPriceForm.isShow">
+            <add-price-form
+              :origin="addPriceForm.origin"
+              @APFclose="emitAPFclose"
+            />
+          </div>
         </el-col>
       </el-row>
 
+      <!--日历组件-->
       <el-row>
         <date-picker
           :param="condition"></date-picker>
-
       </el-row>
 
     </el-row>
 
+    <!--酒店信息-->
     <el-row class="myHotel-info">
       <div class="myHotel-title">Hotel information</div>
       <el-row>
@@ -63,6 +84,7 @@
       </el-row>
     </el-row>
 
+    <!--房型信息-->
     <el-row class="myHotel-rooms">
       <div class="myHotel-title">Rooms</div>
       <el-row class="rooms-title">
@@ -71,18 +93,30 @@
       </el-row>
       <el-row class="rooms-item">
 
-
-        <el-col :span="5" class="room-type edited" v-if="false">
+        <!--已编辑-->
+        <el-col
+          :span="5"
+          class="room-type edited"
+          v-if="!room.isEditing">
           <p>Deluxe Room - Non Smoking</p>
           <p>No WiFi</p>
           <div>
-            <el-button class="btn-success" style="width:140px;">Edit  the  room</el-button>
+            <button
+              class="btn-success"
+              style="width:140px;"
+              @click="handleEditRoom"
+            >Edit  the  room
+            </button>
           </div>
           <div>
-            <el-button class="btn-danger-space" style="width:140px;">Delete  the  room</el-button>
+            <button class="btn-danger-space" style="width:140px;">Delete  the  room</button>
           </div>
         </el-col>
-        <el-col :span="5" class="room-type editing">
+        <!--编辑中-->
+        <el-col
+          :span="5"
+          class="room-type editing"
+          v-if="room.isEditing">
           <p>
             <el-input></el-input>
           </p>
@@ -98,10 +132,13 @@
           </el-row>
           <el-row class="room-btn-group">
             <el-col :span="24">
-              <el-button class="btn-warning">Confirm</el-button>
+              <button class="btn-warning">Confirm</button>
             </el-col>
             <el-col :span="24">
-              <el-button class="btn-success-space">Cancel</el-button>
+              <button
+                class="btn-success-space"
+                @click="handleEditRoom"
+              >Cancel</button>
             </el-col>
           </el-row>
 
@@ -117,7 +154,7 @@
                   Deluxe Room - Non Smoking
                 </el-col>
                 <el-col :span="8">
-                  <el-button class="btn-warning" @click="handleAddPrice">Add the price</el-button>
+                  <button class="btn-warning" @click="handleAddPrice">Add the price</button>
                 </el-col>
               </el-row>
             </el-col>
@@ -154,7 +191,7 @@
         </el-row>
       </el-col>
       <el-col :span="6">
-        <el-button class="btn-warning" style="width: 80px;">Add</el-button>
+        <button class="btn-warning" style="width: 80px;">Add</button>
       </el-col>
     </el-row>
 
@@ -162,47 +199,56 @@
 </template>
 
 <script>
-  import {datePicker} from '@/components'
+  import {datePicker, AddPriceForm} from '@/components'
 
   const Y = new Date().getFullYear();
   const M = new Date().getMonth();
   const D = new Date().getDate();
-
   export default {
     name: "myHotel",
-    components: {datePicker},
+    components: {datePicker, AddPriceForm},
     data() {
       return {
-        condition: {
-          currentDate: new Date(Y, M, 1),
-          minDate: new Date(Y, M, D),
-          maxDate: new Date(Y + 1, M, D),
+        condition: {//日历组件参数
+          currentDate: new Date(Y, M, 1).getTime(),
+          minDate: new Date(Y, M, D).getTime(),
+          maxDate: new Date(Y + 1, M, D).getTime(),
         },
         action: {
           prevBtn: true,
           nextBtn: false,
+        },
+        addPriceForm: {
+          isShow: false,
+          origin: 'update'
+        },
+        room: {
+          isEditing: false,
         }
       }
     },
+    created() {
+      console.log(this.condition);
+    },
     computed: {
       currentDate() {
-        return `${this.trueSelectMonths(this.condition.currentDate.getMonth() + 1)} ${this.condition.currentDate.getFullYear()}`;
+        return `${this.trueSelectMonths(new Date(this.condition.currentDate).getMonth() + 1)} ${new Date(this.condition.currentDate).getFullYear()}`;
       },
       actionBtnStatus() {//计算上下月按钮状态
-        let CT = this.condition.currentDate;
-        let MaxT = this.condition.maxDate;
-        let MinT = this.condition.minDate;
+        let CT = new Date(this.condition.currentDate);
+        let MaxT = new Date(this.condition.maxDate);
+        let MinT = new Date(this.condition.minDate);
         if (CT.getFullYear() === MaxT.getFullYear() && CT.getMonth() === MaxT.getMonth()) {
           this.action.prevBtn = false;
           this.action.nextBtn = true;
-        }else if(CT.getFullYear() === MinT.getFullYear() && CT.getMonth() === MinT.getMonth()){
+        } else if (CT.getFullYear() === MinT.getFullYear() && CT.getMonth() === MinT.getMonth()) {
           this.action.prevBtn = true;
           this.action.nextBtn = false;
-        }else{
+        } else {
           this.action.prevBtn = false;
           this.action.nextBtn = false;
         }
-        return {prevBtn:this.action.prevBtn,nextBtn: this.action.nextBtn};
+        return {prevBtn: this.action.prevBtn, nextBtn: this.action.nextBtn};
       }
     },
     methods: {
@@ -247,45 +293,53 @@
         }
       },
       handleNext() {
-        let CT = this.condition.currentDate;
-        let MT = this.condition.maxDate;
+        let CT = new Date(this.condition.currentDate);
+        let MT = new Date(this.condition.maxDate);
         if (CT.getFullYear() === MT.getFullYear() && CT.getMonth() === MT.getMonth()) {
           return;
         }
         this.action.prevBtn = false;
         this.action.nextBtn = false;
-        let Y = parseInt(this.condition.currentDate.getFullYear());
-        let M = parseInt(this.condition.currentDate.getMonth());
+        let Y = parseInt(new Date(this.condition.currentDate).getFullYear());
+        let M = parseInt(new Date(this.condition.currentDate).getMonth());
         if (M + 1 == 12) {
           Y++;
           M = 0;
         } else {
           M++;
         }
-        this.condition.currentDate = new Date(Y, M);
+        this.condition.currentDate = new Date(Y, M).getTime();
       },
       handlePrev() {
-        let CT = this.condition.currentDate;
-        let MT = this.condition.minDate;
+        let CT = new Date(this.condition.currentDate);
+        let MT = new Date(this.condition.minDate);
         if (CT.getFullYear() === MT.getFullYear() && CT.getMonth() === MT.getMonth()) {
           return;
         }
         this.action.prevBtn = false;
         this.action.nextBtn = false;
-        let Y = parseInt(this.condition.currentDate.getFullYear());
-        let M = parseInt(this.condition.currentDate.getMonth());
+        let Y = parseInt(new Date(this.condition.currentDate).getFullYear());
+        let M = parseInt(new Date(this.condition.currentDate).getMonth());
         if (M - 1 == 0) {
           Y--;
           M = 12;
         } else {
           M--;
         }
-        this.condition.currentDate = new Date(Y, M);
+        this.condition.currentDate = new Date(Y, M).getTime();
       },
       handleAddPrice() {
         this.$router.push({
           path: '/home/administration/addPrice'
         })
+      },
+      handleAPFshow() {
+      },
+      emitAPFclose() {
+        this.addPriceForm.isShow = false;
+      },
+      handleEditRoom() {
+        this.room.isEditing = !this.room.isEditing;
       }
     }
   }
@@ -326,6 +380,7 @@
         color: rgba(153, 153, 153, 1);
       }
       .action {
+        position: relative;
         height: 32px;
         margin-bottom: 26px;
         .el-col {
@@ -333,6 +388,13 @@
           line-height: 0;
           &-9 {
             text-align: right;
+            .add-price-form {
+              position: absolute;
+              left: 0;
+              top: 30px;
+              width: 100%;
+              z-index: 2000;
+            }
           }
           .year {
             display: flex;
@@ -402,7 +464,7 @@
                   margin-bottom: 10px;
                 }
               }
-              .el-button {
+              button {
                 width: 140px;
                 height: 31px;
               }
@@ -447,7 +509,7 @@
             color: #0B9D78;
             font-size: 18px;
             margin-bottom: 10px;
-            .el-button {
+            button {
               height: 100%;
             }
           }

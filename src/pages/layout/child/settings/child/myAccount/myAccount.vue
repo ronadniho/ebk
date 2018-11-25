@@ -33,8 +33,14 @@
             <el-input></el-input>
           </el-col>
           <el-col :span="8" style="margin:0;padding-left: 40px;box-sizing: border-box;">
-            <el-button class="btn-success-space">Cancel</el-button>
-            <el-button class="btn-warning">Confirm</el-button>
+            <el-button
+              class="btn-success-space"
+              @click="handleCancel"
+            >Cancel</el-button>
+            <el-button
+              class="btn-warning"
+              @click="handleConfirm"
+            >Confirm</el-button>
           </el-col>
         </el-row>
       </el-col>
@@ -52,24 +58,30 @@
 <script>
   export default {
     name: "myAccount",
-    data(){
-      return{
-        editing:false,
+    data() {
+      return {
+        editing: false,
       }
     },
-    methods:{
-      handleEdit(){
+    methods: {
+      handleEdit() {
         this.editing = !this.editing;
+      },
+      handleCancel(){
+        this.handleEdit();
+      },
+      handleConfirm(){
+        this.handleEdit();
       }
     }
   }
 </script>
 
 <style scoped lang="scss">
-  .myAccount{
+  .myAccount {
     width: 100%;
     height: 100%;
-    &-title{
+    &-title {
       width: 100%;
       height: 50px;
       line-height: 50px;
@@ -80,30 +92,30 @@
       padding: 0 18px;
       box-sizing: border-box;
     }
-    &-item{
+    &-item {
       padding: 0 17px;
       box-sizing: border-box;
       height: 26px;
       line-height: 26px;
       font-size: 18px;
-      &:nth-child(2){
+      &:nth-child(2) {
         margin-top: 15px;
       }
-      &-title{
-        color:rgb(153,153,153);
+      &-title {
+        color: rgb(153, 153, 153);
       }
-      >.el-col{
+      > .el-col {
         margin: 15px 0;
-        &-18{
+        &-18 {
           position: relative;
-          span{
+          span {
             margin-right: 30px;
           }
-          img{
+          img {
             width: 263px;
             height: 262px;
             margin-right: 20px;
-            &+.el-button{
+            & + .el-button {
               position: absolute;
               bottom: 30px;
             }

@@ -2,6 +2,7 @@
   <div class="data-picker">
     <table>
       <thead>
+      <!--星期-->
       <tr
         v-for="(item,index) in week"
         :key="index">
@@ -10,22 +11,28 @@
       </thead>
       <tbody>
       <tr>
-        <td v-for="(v,i) in len" v-if="i<len">
+        <!--每日-->
+        <td v-for="(v,i) in renderData">
           <div
             class="ready"
-            :class="{'active':i==4}">
-            <p class="date">{{v}}</p>
-            <p class="price">₹ 10290</p>
+            :class="{
+            'disabled':!v.day,
+            'active':v.isActive
+            }"
+            @click="handleSelect(v,i)"
+          >
+            <p class="date" v-if="v.day">{{v.day}}</p>
+            <p class="price" v-if="v.day">₹ 10290</p>
             <!--<p class="status">SOLDOUT</p>-->
           </div>
           <!--编辑-->
           <div
             class="edit edit-u-price"
-            v-if="false"
+            v-if="v.isUpdate"
           >
             <el-row class="edit-date">
               <el-col :span="12" class="title">
-                02/09/2018
+                {{v.title}}
               </el-col>
               <el-col :span="12"></el-col>
             </el-row>
@@ -73,11 +80,11 @@
           <!--添加-->
           <div
             class="edit edit-a-price"
-            v-if="false"
+            v-if="v.isAdd"
           >
             <el-row class="edit-date">
               <el-col :span="12" class="title">
-                02/09/2018
+                {{v.title}}
               </el-col>
               <el-col :span="12"></el-col>
             </el-row>
@@ -98,8 +105,14 @@
             </el-row>
             <el-row class="edit-btn-group">
               <el-col :span="24">
-                <el-button class="btn-success-space">Cancel</el-button>
-                <el-button class="btn-warning">Submit</el-button>
+                <el-button
+                  class="btn-success-space"
+                  @click="handleAddCancel(v,i)">Cancel
+                </el-button>
+                <el-button
+                  class="btn-warning"
+                  @click="handleAddSubmit">Submit
+                </el-button>
               </el-col>
             </el-row>
 
@@ -123,7 +136,8 @@
         select: {
           default: '0',
         },
-        selectMonth: 1
+        selectMonth: 1,
+        nowDays: [],//当月总天数
       }
     },
     computed: {
@@ -167,25 +181,99 @@
             break;
         }
       },
-      minDate(){
-        return new Date(this.param.minDate)||new Date();
+      minDate() {
+        return new Date(this.param.minDate) || new Date();
       },
-      maxDate(){
-        return new Date(this.param.maxDate)||new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * 365);
+      maxDate() {
+        return new Date(this.param.maxDate) || new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * 365);
       },
-      currentDate(){
-        let date = new Date();
-        console.log(date.getMonth());
-        console.log(date.getFullYear());
-        console.log(date.getDay());
-        console.log(date.getDate());
-        return
+      currentDate() {
+        return new Date(this.param.currentDate) || new Date();
+      },
+      currentYear() {
+        return this.currentDate.getFullYear();
+      },
+      currentMonth() {
+        return this.currentDate.getMonth();
+      },
+      dayCount() {//当月总天数
+        let n = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+        return n;
+      },
+      firstDayInWeek() {//当月第一天在星期几
+        return new Date(this.currentYear, this.currentMonth, 1).getDay();
+      },
+      lastMonthDay() {//当月显示上个月尾几天
+        let lastNum = this.firstDayInWeek;
+        let lastDays = [];
+        if (lastNum === 0) return lastDays;
+        let i = 0;
+        let lastDayNum = new Date(this.selectYear, this.selectMonth - 1, 0).getDate();
+        for (; i < lastNum; i++) {
+          lastDays.unshift({});
+          lastDayNum--;
+        }
+        return lastDays;
+      },
+      nextMonthDay() {//当月显示下个月头几天
+        let num = 42 - this.firstDayInWeek - this.dayCount;//42个格子
+        let nextDays = [];
+        if (num === 0) return nextDays;
+        let i = 1;
+        for (; i <= num; i++) {
+          nextDays.push({});
+        }
+        return nextDays;
+      },
+      renderData() {
+        let cM = this.currentMonth < 10 ? '0' + this.currentMonth : this.currentMonth;
+        let cY = this.currentYear < 10 ? '0' + this.currentYear : this.currentYear;
+        this.nowDays = [];
+        let i = 1;
+        for (; i <= this.dayCount; i++) {
+          let clone = i < 10 ? '0' + i : i;
+          this.nowDays.push({
+            title: `${clone}/${cM}/${cY}`,
+            day: i,
+            isUpdate: false,
+            isAdd: false,
+            isActive: false,
+          });
+        }
+        return [...this.lastMonthDay, ...this.nowDays, ...this.nextMonthDay];
       }
     },
-    created(){
-      this.currentDate;
+    created() {
+      console.log(this.renderData);
     },
-    methods: {}
+    methods: {
+      handleSelect(v, i) {
+        if (!v.day) {
+          return false;
+        }
+        let tar = this.renderData;
+        for (let j = 0; j < tar.length; j++) {
+          if (i == j) {
+            this.$set(tar[j], 'isAdd', !tar[j].isAdd);
+            this.$set(tar[j], 'isActive', !tar[j].isActive);
+            // this.$set(tar[j], 'isUpdate', !tar[j].isUpdate);
+            this.$set(tar[j], 'isUpdate', false);
+          }
+          else {
+            this.$set(tar[j], 'isAdd', false);
+            this.$set(tar[j], 'isActive', false);
+            this.$set(tar[j], 'isUpdate', false);
+          }
+        }
+      },
+      handleAddCancel(v, i) {
+        v.isAdd = false;
+        v.isActive = false;
+      },
+      handleAddSubmit() {
+
+      }
+    }
   }
 </script>
 
@@ -247,6 +335,14 @@
     background-color: #0B9D78;
   }
 
+  tbody > tr > td > .ready.disabled {
+    background-color: #ddd;
+  }
+
+  tbody > tr > td > .ready.disabled:hover {
+    cursor: not-allowed;
+  }
+
   tbody > tr > td > .ready.active > p.date {
     color: #fff;
   }
@@ -268,6 +364,7 @@
     color: rgba(11, 157, 120, 1);
     font-size: 20px;
     text-align: center;
+    font-weight: bold;
   }
 
   tbody > tr > td > .ready > p.status {
@@ -278,7 +375,7 @@
     text-align: center;
   }
 
-  tbody > tr > td:hover {
+  tbody > tr > td > .ready:not(.disabled):hover {
     cursor: pointer;
   }
 
@@ -303,11 +400,18 @@
   }
 
   @for $i from 1 through 42 {
-
-    @if ($i==7) {
-      tbody > tr > td:nth-child(#{$i}n-1) .edit {
-        left: -100%;
+    @if ($i<7) {
+      tbody > tr > td:nth-child(#{$i}) .edit {
+        left: 0;
       }
+      /* tbody > tr > td:nth-child(#{$i}n) .edit {
+         left: 0;
+       }*/
+    }
+    @if ($i==7) {
+      /*tbody > tr > td:nth-child(#{$i}n-1) .edit {
+        left: -100%;
+      }*/
       tbody > tr > td:nth-child(#{$i}n) .edit {
         left: -100%;
       }
@@ -324,21 +428,5 @@
       }
     }
   }
-
-  /*tbody > tr > td:nth-child(7) .edit {
-    left: -100%;
-  }
-
-  tbody > tr > td:nth-child(14) .edit {
-    left: -100%;
-  }
-
-  tbody > tr > td:nth-child(21) .edit {
-    left: -100%;
-  }
-
-  tbody > tr > td:nth-child(28) .edit {
-    left: -100%;
-  }*/
 
 </style>
