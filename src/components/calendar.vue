@@ -4,7 +4,9 @@
       <el-row type="flex" class="row-bg s-row-yearMonth">
         <el-col :span="24">
           <div class="grid-content">
-            {{trueSelectMonths}} - {{selectYear}}
+            <span>
+               {{trueSelectMonths}} - {{selectYear}}
+            </span>
             <!-- 批量修改 -->
             <add-price-form
               v-show="batchStatus"
@@ -15,7 +17,10 @@
 
 
             <div class="batch-price">
-              <el-button type="primary" @click="batchStatus=!batchStatus;">Batch modification price</el-button>
+              <button
+                class="btn-success"
+                @click="batchStatus=!batchStatus;">Batch modification price
+              </button>
             </div>
           </div>
         </el-col>
@@ -40,7 +45,7 @@
           :class="{active:item.updateDialog||item.addDialog}"
         >
           <div class="grid-content"
-               :style="[{backgroundColor:item._ltStatus?'#ccc':''}]"
+               :class="{'disabled':(!item._date&&!item._ltStatus)?true:item._ltStatus?true:false}"
           >
             <div style="height:100%;" @click.stop="handleSelect(item,index)">
               <!-- 日期 -->
@@ -67,18 +72,22 @@
 
 
             <!-- 修改弹框 -->
-            <el-row v-if="item.updateDialog" class="grid-content-edit">
+            <el-row
+              v-if="item.updateDialog"
+              class="grid-content-edit edit-u-price">
               <el-col :span="24">
                 <div class="s-container">
                   <el-row :gutter="20">
-                    <el-col :span="10">{{item._date+'/'+utilMonth+'/'+selectYear}}</el-col>
+                    <el-col :span="10" class="title">
+                      {{item._date+'/'+utilMonth+'/'+selectYear}}
+                    </el-col>
                   </el-row>
                   <el-row :gutter="20">
-                    <el-col :span="8">Current price</el-col>
+                    <el-col :span="8" class="title">Current price</el-col>
                     <el-col :span="16">₹ {{item.currentPrice}}</el-col>
                   </el-row>
                   <el-row :gutter="20">
-                    <el-col :span="8">Change price</el-col>
+                    <el-col :span="8" class="title">Change price</el-col>
                     <el-col :span="16">
                       <el-row>
                         <el-col :span="2">₹</el-col>
@@ -90,22 +99,29 @@
                     </el-col>
                   </el-row>
                   <el-row :gutter="20">
-                    <el-col :span="8">SOLDOUT</el-col>
+                    <el-col :span="8" class="title danger">SOLDOUT</el-col>
                     <el-col :span="16">
                       <div class="input-suffix">
-                        <label class="s-label-checkbox">
-                          <input type="checkbox" v-model="item._priceStatus" class="s-checkbox"/>
-                          <span class="s-checkbox-icon"></span>
-                        </label>
+                        <input
+                          id="status"
+                          type="checkbox"
+                          v-model="item._priceStatus"
+                          class="s-checkbox"/>
+                        <label for="status"></label>
                       </div>
                     </el-col>
                   </el-row>
                   <el-row :gutter="20">
-                    <el-col :span="8">
-                      <el-button @click.stop="handleUpdatePrice(item)">Submit</el-button>
-                    </el-col>
-                    <el-col :span="16">
-                      <el-button @click.stop="handleCancel(item)">Cancel</el-button>
+                    <el-col :span="24" style="margin-bottom: 0;">
+                      <button
+                        class="btn-success-space"
+                        @click.stop="handleCancel(item)">Cancel
+                      </button>
+                      <button
+                        class="btn-warning"
+                        style="margin-left: 10px;"
+                        @click.stop="handleUpdatePrice(item)">Submit
+                      </button>
                     </el-col>
                   </el-row>
                 </div>
@@ -113,7 +129,9 @@
             </el-row>
 
             <!-- 添加弹框 -->
-            <el-row v-if="item.addDialog" class="grid-content-edit">
+            <el-row
+              v-if="item.addDialog"
+              class="grid-content-edit edit-a-price">
               <el-col :span="24">
                 <div class="s-container">
                   <el-row :gutter="20">
@@ -141,11 +159,16 @@
 
 
                   <el-row :gutter="20">
-                    <el-col :span="8">
-                      <el-button @click.stop="handleAddPrice(item)">Submit</el-button>
-                    </el-col>
-                    <el-col :span="16">
-                      <el-button @click.stop="handleCancel(item)">Cancel</el-button>
+                    <el-col :span="24">
+                      <button
+                        class="btn-success-space"
+                        @click.stop="handleCancel(item)">Cancel
+                      </button>
+                      <button
+                        class="btn-warning"
+                        style="margin-left: 10px;"
+                        @click.stop="handleAddPrice(item)">Submit
+                      </button>
                     </el-col>
                   </el-row>
                 </div>
@@ -350,40 +373,40 @@
       trueSelectMonths() {
         switch (this.selectMonth) {
           case 1:
-            return 'Jan';
+            return 'January';
             break;
           case 2:
-            return 'Feb';
+            return 'February';
             break;
           case 3:
-            return 'Mar';
+            return 'March';
             break;
           case 4:
-            return 'Apr';
+            return 'April';
             break;
           case 5:
             return 'May';
             break;
           case 6:
-            return 'Jun';
+            return 'June';
             break;
           case 7:
-            return 'Jul';
+            return 'July';
             break;
           case 8:
-            return 'Aug';
+            return 'August';
             break;
           case 9:
-            return 'Sep';
+            return 'September';
             break;
           case 10:
-            return 'Oct';
+            return 'October';
             break;
           case 11:
-            return 'Nov';
+            return 'November';
             break;
           case 12:
-            return 'Dec';
+            return 'December';
             break;
         }
       }
@@ -509,7 +532,7 @@
           myHotelsMessage(res.status, res, callee);
 
         });
-      }
+      },
     }
   }
 </script>
@@ -522,7 +545,7 @@
   }
 
   @mixin col-l4 {
-    width: 14%;
+    width: 14.28%;;
     height: 100px;
   }
 
@@ -546,9 +569,15 @@
     line-height: 60px;
     font-size: 20px;
     .grid-content {
-      width: 14%*7;
+      width: 14.28%*7;
       text-align: center;
       position: relative;
+
+      > span {
+        font-size: 20px;
+        text-align: center;
+        color: rgba(11, 157, 120, 1);
+      }
       .add-price-form {
         position: absolute;
         right: 0;
@@ -572,15 +601,23 @@
   }
 
   .s-row-title {
-    height: 40px;
-    line-height: 40px;
+    width: 100%;
+    height: 57px;
+    line-height: 57px;
+    background-color: #E7F5F2;
     @include text-align;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    box-sizing: border-box;
     .s-col-l4 {
-      @include col-l4;
+      width: 14.28%;
+      .grid-content {
+        background-color: #E7F5F2;
+        color: #0B9D78;
+        font-size: 20px;
+      }
     }
-    .grid-content {
-      background-color: $datePicker-header-bg-color;
-    }
+
   }
 
   .s-row-body {
@@ -604,11 +641,16 @@
       .grid-content {
         height: 100%;
         position: relative;
+        padding: 16px 0 15px;
+        box-sizing: border-box;
+        &.disabled {
+          background-color: #ddd;
+        }
         &-edit {
           position: absolute;
-          width: 301%;
+          width: 201%;
           height: 301%;
-          background-color: $tar;
+          background-color: #E7F5F2;
           left: 0;
           bottom: -301%;
           z-index: 100;
@@ -617,18 +659,37 @@
             .s-container {
               width: 100%;
               height: 100%;
-              padding: 0 20px;
+              padding: 20px 20px;
               box-sizing: border-box;
               .el-col {
-                font-size: 12px;
+                font-size: 18px;
                 text-align: left;
-                height: 57px;
-                line-height: 57px;
+                height: 29px;
+                line-height: 29px;
+                color: rgb(11, 157, 120);
+                margin-bottom: 20px;
                 .el-input {
                   width: 100%;
                 }
                 .danger {
                   text-align: right;
+                }
+              }
+            }
+          }
+
+        }
+        .edit-u-price {
+          .el-col {
+            .s-container {
+              .title {
+                color: #0B9D78;
+                font-size: 18px;
+                &.danger {
+                  height: 32px;
+                  line-height: 32px;
+                  color: #E51C23;
+                  font-weight: 400;
                 }
               }
             }
@@ -666,12 +727,15 @@
         }
       }
       .date {
-        line-height: 34px;
+        line-height: 29px;
+        color: #333333;
+        font-size: 20px;
+        text-align: center;
       }
     }
   }
 
-  .s-label-checkbox {
+  /*.s-label-checkbox {
     vertical-align: middle;
     width: 40px;
     height: 40px;
@@ -708,11 +772,17 @@
     position: absolute;
     left: 11px;
     top: 3px;
-  }
+  }*/
 
-  .primary.price, .danger, .date {
-    font-weight: 700;
+  .primary.price, .danger {
+    /*font-size: 20px;
+    color:rgb(51,51,51);*/
+    height: 29px;
+    line-height: 29px;
+    color: #0b9d78;
     font-size: 20px;
+    text-align: center;
+    font-weight: bold;
   }
 
 </style>

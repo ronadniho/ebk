@@ -2,34 +2,52 @@
   <el-aside width="250px">
     <el-menu
       :mode="elMenu.mode"
-      :default-active="elMenu.defaultActive"
+      :default-active="defaultActive"
       :show-timeout="elMenu.showTimeout"
       :text-color="elMenu.textColor"
       :active-text-color="elMenu.activeTextColor"
       :background-color="elMenu.backgroundColor"
-      class="el-menu-vertical-demo"
     >
 
-      <el-submenu index="0">
+      <!--<el-submenu index="admin">
         <template slot="title">
           <i class="iconfont">&#xe60e;</i>
           <span>Administration</span>
         </template>
 
-        <el-menu-item index="0-1">
+        <el-menu-item index="myHotel">
           <router-link :to="'/home/administration/myHotel'">My Hotel</router-link>
         </el-menu-item>
 
       </el-submenu>
 
-      <el-submenu index="1">
+      <el-submenu index="setting">
         <template slot="title">
           <i class="iconfont">&#xe61c;</i>
           <span>Settings</span>
         </template>
 
-        <el-menu-item index="1-1">
+        <el-menu-item index="myAccount">
           <router-link :to="'/home/settings/myAccount'">My Account</router-link>
+        </el-menu-item>
+
+      </el-submenu>-->
+
+      <el-submenu
+        v-for="(item ,index) in elMenu.asideList"
+        :key="item.id"
+        v-if="item.children"
+        :index="item.index">
+
+        <template slot="title">
+          <i class="iconfont" v-html="item.icon"></i>
+          <span>{{item.titles}}</span>
+        </template>
+        <el-menu-item
+          v-for="child in item.children"
+          :key="child.id"
+          :index="child.index">
+          <router-link :to="child.path">{{child.titles}}</router-link>
         </el-menu-item>
 
       </el-submenu>
@@ -39,27 +57,56 @@
 </template>
 
 <script>
+  const ASIDE = [
+    {
+      id: '0',
+      index: 'admin',
+      titles: 'Administration',
+      icon:'&#xe60e;',
+      children: [
+        {
+          id: '0-1',
+          index: 'myHotel',
+          titles: 'My Hotel',
+          path: '/home/administration/myHotel'
+        }
+      ]
+    },
+    {
+      id: '1',
+      index: 'setting',
+      titles: 'Settings',
+      icon:'&#xe61c;',
+      children: [
+        {
+          id: '1-1',
+          index: 'myAccount',
+          titles: 'My Account',
+          path: '/home/settings/myAccount'
+        }
+      ]
+    }
+  ]
   export default {
     name: "leftAside",
     data() {
       return {
         elMenu: {
-          mode:'vertical',
-          defaultActive: '0-1',
+          mode: 'vertical',
           showTimeout: 200,
           backgroundColor: '#005C45',
           textColor: '#fff',
-          activeTextColor: '#ffd04b'
+          activeTextColor: '#ffd04b',
+          asideList: ASIDE,
         }
       }
     },
+    computed:{
+      defaultActive(){
+        return this.$store.state.aside.defaultActive
+      }
+    },
     methods: {
-      // handleOpen(key, keyPath) {
-      //   console.log(key, keyPath);
-      // },
-      // handleClose(key, keyPath) {
-      //   console.log(key, keyPath);
-      // }
     }
   }
 </script>

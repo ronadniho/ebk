@@ -33,16 +33,25 @@ export default new Router({
               path:'myHotel',
               name:'myHotel',
               component:MyHotel,
+              meta:{
+                aside:'myHotel'
+              },
             },
             {
               path:'addPrice',
               name:'addPrice',
               component:AddPrice,
+              meta:{
+                aside:'myHotel'
+              },
             },
             {
               path:'updatePrice',
               name:'updatePrice',
               component:UpdatePrice,
+              meta:{
+                aside:'myHotel'
+              },
             }
           ]
         },
@@ -55,6 +64,9 @@ export default new Router({
               path:'myAccount',
               name:'myAccount',
               component:MyAccount,
+              meta:{
+                aside:'myAccount'
+              }
             }
           ]
         },

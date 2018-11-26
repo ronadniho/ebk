@@ -5,13 +5,14 @@
       <el-col :span="6">
         <div class="input-suffix">
           <el-row>
-            <el-col
+            <!--<el-col
               :span="8"
               class="title"
             >
               Start Date
-            </el-col>
-            <el-col :span="14" style="line-height:40px;">
+            </el-col>-->
+            <el-col :span="24" style="line-height:40px;">
+              <b class="title">Start Date</b>
               <el-date-picker
                 :disabled="item.disabled&&addPriceList.length>1"
                 :picker-options="pickerOptionsStart"
@@ -34,13 +35,14 @@
       <el-col :span="6">
         <div class="input-suffix">
           <el-row>
-            <el-col
+            <!--<el-col
               :span="8"
               class="title"
             >
               End Date
-            </el-col>
-            <el-col :span="14" style="line-height:40px;">
+            </el-col>-->
+            <el-col :span="24" style="line-height:40px;">
+              <b class="title">End Date</b>
               <el-date-picker
                 :disabled="item.disabled&&addPriceList.length>1"
                 :picker-options="pickerOptionsEnd"
@@ -63,13 +65,15 @@
       <el-col :span="6">
         <div class="input-suffix">
           <el-row>
-            <el-col
-              :span="6"
-              class="title"
-            >
-              Price ₹
-            </el-col>
-            <el-col :span="15" style="line-height:40px;">
+            <!-- <el-col
+               :span="6"
+               class="title"
+             >
+               Price ₹
+             </el-col>-->
+            <el-col :span="21" style="line-height:40px;">
+              <b class="title">Price </b>
+              <i style="font-style: normal;font-size: 18px;"> ₹ &nbsp;</i>
               <el-input
                 :disabled="item.disabled&&addPriceList.length>1"
                 type="number"
@@ -90,10 +94,15 @@
       <el-col :span="4">
         <div class="input-suffix" style="line-height:40px;">
           <label class="s-label-checkbox">
-            <input type="checkbox" v-model="item._priceStatus" class="s-checkbox"/>
+            <input
+              type="checkbox"
+              v-model="item._priceStatus"
+              class="s-checkbox"
+              :id="'s-checkbox-'+index"
+            />
             <span class="s-checkbox-icon"></span>
           </label>
-          <span>SOLDOUT</span>
+          <span><label :for="'s-checkbox-'+index">SOLDOUT</label></span>
 
         </div>
       </el-col>
@@ -157,14 +166,14 @@
 
 <script>
   import AddPriceList from '@/model/AddPriceList';
-  // import {getDateFormat, deepClone} from '../../../../utils/utils'
+  import {getDateFormat, deepClone} from '@/util/common'
   // import {myHotelsMessage} from '../../../../utils/myHotelsMessage'
-  import {mapGetters} from 'vuex'
-  // import {batchCreatePrice, batchUpdatePrice} from '../../../../api/myHotels/price'
+  import {batchCreatePrice} from '@/api'
   import Cookie from 'js-cookie'
 
+
   export default {
-    props:['origin'],
+    props: ['origin'],
     data() {
       return {
         props: {
@@ -225,15 +234,6 @@
         this.route = {
           hotelName, roomName, planName
         };
-        this.$store.commit('GO_ADD', [
-          {
-            title: hotelName,
-            href: -1
-          },
-          {
-            title: `${roomName} - ${planName}`,
-          }
-        ]);
       }
       this.roomType = this.$route.params.roomType;
       this.planId = this.$route.params.planId;
@@ -243,7 +243,7 @@
       // ...mapGetters([
       //   'myHotelPrice'
       // ]),
-      myHotelPrice(){
+      myHotelPrice() {
         return this.origin;
       }
     },
@@ -427,29 +427,16 @@
             let params = this.util(addPriceList);
 
             batchCreatePrice(params, params).then(res => {
-              // this.loading = false;
-              let callee = (res) => {
-
+              console.log(res);
+              if (res.data.message == 'success') {
                 this.$router.push({
-                  path: `/myhotels/updateprice/${this.roomType}/${this.planId}`,
-                  query: {
-                    ...this.route
-                  }
+                  path: `/home/administration/updatePrice`,
                 });
               }
-              myHotelsMessage(res.status, res, callee);
-              // if(res.status==200){
-
-              //     this.$router.push({
-              //         path:`/myhotels/updateprice/${this.roomType}/${this.planId}`,
-              //         query:{
-              //             ...this.route
-              //         }
-              //     });
-              // }
             }).catch(err => {
             });
-          } else if (this.myHotelPrice == 'update') {
+          }
+          else if (this.myHotelPrice == 'update') {
             let updatePriceList = this.addPriceList;
             let params = this.util(updatePriceList);
 
@@ -515,9 +502,9 @@
 </script>
 <style lang="scss" scoped>
   @import '../style/s-variables.scss';
-  // date component
+
   .el-input {
-    width: auto;
+    width: 165px;
   }
 
   .add-price-form {
@@ -610,12 +597,13 @@
   }
 
   .title {
-    font-size: 14px;
+    font-size: 18px;
     padding-right: 5px;
     box-sizing: border-box;
     line-height: 40px;
     text-align: left;
     color: #0B9D78;
+    font-weight: 400;
   }
 
   .action {

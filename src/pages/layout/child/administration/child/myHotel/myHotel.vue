@@ -4,17 +4,16 @@
       <div class="myHotel-title">Current Price</div>
 
       <!--条件选择-->
-      <el-row>
-        <el-col :span="6" class="title">Choose the room</el-col>
+      <el-row class="choose-room">
+        <el-col :span="5" class="title">Choose the room</el-col>
         <el-col :span="18">
-          <!--<el-select v-model="select.default" placeholder="">
+          <el-select v-model="roomType.default" placeholder="">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
+              v-for="(item,index) in roomType.list"
+              :key="index"
               :value="item.value">
             </el-option>
-          </el-select>-->
+          </el-select>
         </el-col>
       </el-row>
 
@@ -95,26 +94,29 @@
 
         <!--已编辑-->
         <el-col
-          :span="5"
+          :span="6"
           class="room-type edited"
           v-if="!room.isEditing">
           <p>Deluxe Room - Non Smoking</p>
-          <p>No WiFi</p>
+          <p style="color:#009d79;">No WiFi</p>
           <div>
             <button
               class="btn-success"
-              style="width:140px;"
               @click="handleEditRoom"
-            >Edit  the  room
+              style="width:140px;">Edit  the  room
             </button>
           </div>
           <div>
-            <button class="btn-danger-space" style="width:140px;">Delete  the  room</button>
+            <button
+              class="btn-danger-space"
+              @click="handleDeleteRoom"
+              style="width:140px;">Delete  the  room
+            </button>
           </div>
         </el-col>
         <!--编辑中-->
         <el-col
-          :span="5"
+          :span="6"
           class="room-type editing"
           v-if="room.isEditing">
           <p>
@@ -126,26 +128,29 @@
               <label for="room-wifi-cb"></label>
             </el-col>
             <el-col :span="14">
-              Free WiFi
+              <label for="room-wifi-cb">Free WiFi</label>
             </el-col>
 
           </el-row>
           <el-row class="room-btn-group">
             <el-col :span="24">
-              <button class="btn-warning">Confirm</button>
+              <button
+                class="btn-warning"
+                @click="handleConfirmRoom">Confirm
+              </button>
             </el-col>
             <el-col :span="24">
               <button
                 class="btn-success-space"
-                @click="handleEditRoom"
-              >Cancel</button>
+                @click="handleEditRoom">Cancel
+              </button>
             </el-col>
           </el-row>
 
         </el-col>
 
 
-        <el-col :span="19">
+        <el-col :span="18">
           <el-row>
 
             <el-col :span="24">
@@ -154,7 +159,10 @@
                   Deluxe Room - Non Smoking
                 </el-col>
                 <el-col :span="8">
-                  <button class="btn-warning" @click="handleAddPrice">Add the price</button>
+                  <button
+                    class="btn-warning"
+                    @click="handleAddPrice">Add the price
+                  </button>
                 </el-col>
               </el-row>
             </el-col>
@@ -165,7 +173,10 @@
                   Deluxe Room  - Non Smoking  with Breakfast
                 </el-col>
                 <el-col :span="8">
-                  <button class="btn-success">Edit the price</button>
+                  <button
+                    class="btn-success"
+                    @click="handleEditPrice">Edit the price
+                  </button>
                   <button class="btn-danger-space">Delete the price</button>
                 </el-col>
               </el-row>
@@ -187,11 +198,16 @@
             <input type="checkbox" id="add-room-cb">
             <label for="add-room-cb"></label>
           </el-col>
-          <el-col :span="14">Free WiFi</el-col>
+          <el-col :span="14">
+            <label for="add-room-cb">Free WiFi</label>
+          </el-col>
         </el-row>
       </el-col>
       <el-col :span="6">
-        <button class="btn-warning" style="width: 80px;">Add</button>
+        <button
+          class="btn-warning"
+          style="width: 80px;margin-left: 13px;">Add
+        </button>
       </el-col>
     </el-row>
 
@@ -224,11 +240,18 @@
         },
         room: {
           isEditing: false,
+        },
+        roomType: {
+          list: [
+            {value: 1},
+            {value: 2}
+          ],
+          default: ''
         }
       }
     },
     created() {
-      console.log(this.condition);
+      this.$store.commit('updateAside', this.$route.meta.aside);
     },
     computed: {
       currentDate() {
@@ -252,6 +275,67 @@
       }
     },
     methods: {
+      handleNext() {
+        let CT = new Date(this.condition.currentDate);
+        let MT = new Date(this.condition.maxDate);
+        if (CT.getFullYear() === MT.getFullYear() && CT.getMonth() === MT.getMonth()) {
+          return;
+        }
+        this.action.prevBtn = false;
+        this.action.nextBtn = false;
+        let Y = parseInt(new Date(this.condition.currentDate).getFullYear());
+        let M = parseInt(new Date(this.condition.currentDate).getMonth());
+        if (M + 1 == 12) {
+          Y++;
+          M = 0;
+        } else {
+          M++;
+        }
+        this.condition.currentDate = new Date(Y, M).getTime();
+      },
+      handlePrev() {
+        let CT = new Date(this.condition.currentDate);
+        let MT = new Date(this.condition.minDate);
+        if (CT.getFullYear() === MT.getFullYear() && CT.getMonth() === MT.getMonth()) {
+          return;
+        }
+        this.action.prevBtn = false;
+        this.action.nextBtn = false;
+        let Y = parseInt(new Date(this.condition.currentDate).getFullYear());
+        let M = parseInt(new Date(this.condition.currentDate).getMonth());
+        if (M - 1 == 0) {
+          Y--;
+          M = 12;
+        } else {
+          M--;
+        }
+        this.condition.currentDate = new Date(Y, M).getTime();
+      },
+      handleAddPrice() {
+        this.$router.push({
+          path: '/home/administration/addPrice'
+        });
+      },
+      handleEditPrice() {
+        this.$router.push({
+          path: '/home/administration/updatePrice'
+        });
+      },
+      handleAPFshow() {
+        this.addPriceForm.isShow = !this.addPriceForm.isShow;
+      },
+      emitAPFclose() {
+        this.addPriceForm.isShow = false;
+      },
+      handleEditRoom() {
+        this.room.isEditing = !this.room.isEditing;
+      },
+      handleDeleteRoom() {
+
+      },
+      handleConfirmRoom() {
+
+      },
       trueSelectMonths(v) {
         switch (v) {
           case 1:
@@ -292,55 +376,6 @@
             break;
         }
       },
-      handleNext() {
-        let CT = new Date(this.condition.currentDate);
-        let MT = new Date(this.condition.maxDate);
-        if (CT.getFullYear() === MT.getFullYear() && CT.getMonth() === MT.getMonth()) {
-          return;
-        }
-        this.action.prevBtn = false;
-        this.action.nextBtn = false;
-        let Y = parseInt(new Date(this.condition.currentDate).getFullYear());
-        let M = parseInt(new Date(this.condition.currentDate).getMonth());
-        if (M + 1 == 12) {
-          Y++;
-          M = 0;
-        } else {
-          M++;
-        }
-        this.condition.currentDate = new Date(Y, M).getTime();
-      },
-      handlePrev() {
-        let CT = new Date(this.condition.currentDate);
-        let MT = new Date(this.condition.minDate);
-        if (CT.getFullYear() === MT.getFullYear() && CT.getMonth() === MT.getMonth()) {
-          return;
-        }
-        this.action.prevBtn = false;
-        this.action.nextBtn = false;
-        let Y = parseInt(new Date(this.condition.currentDate).getFullYear());
-        let M = parseInt(new Date(this.condition.currentDate).getMonth());
-        if (M - 1 == 0) {
-          Y--;
-          M = 12;
-        } else {
-          M--;
-        }
-        this.condition.currentDate = new Date(Y, M).getTime();
-      },
-      handleAddPrice() {
-        this.$router.push({
-          path: '/home/administration/addPrice'
-        })
-      },
-      handleAPFshow() {
-      },
-      emitAPFclose() {
-        this.addPriceForm.isShow = false;
-      },
-      handleEditRoom() {
-        this.room.isEditing = !this.room.isEditing;
-      }
     }
   }
 </script>
@@ -351,6 +386,11 @@
   .myHotel {
     width: 100%;
     height: 100%;
+    .choose-room {
+      .el-select {
+        width: 497px;
+      }
+    }
     &-title {
       width: 100%;
       height: 50px;
@@ -416,6 +456,9 @@
                   margin: 0;
                   &.disabled {
                     color: #ddd;
+                    &:hover {
+                      cursor: not-allowed;
+                    }
                   }
                   &:not(.disabled):hover {
                     cursor: pointer;
@@ -454,6 +497,7 @@
           &.editing {
             position: relative;
             .room-btn-group {
+              width: 100%;
               position: absolute;
               bottom: 20px;
               height: 71px;
@@ -547,7 +591,7 @@
           .el-col {
             position: relative;
             text-align: left;
-            label {
+            #add-room-cb+label {
               position: absolute !important;
               right: 20px;
               top: 50%;

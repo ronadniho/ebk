@@ -12,37 +12,65 @@
   }
 }
 
-//.el-button:focus, .el-button:hover {
-//  color: $--btn--success;
-//  border-color: $--btn--success;
-//  background-color: $--btn--success-active;
-//}
-
 .el-input.is-active .el-input__inner, .el-input__inner:focus {
   border-color: $--btn--success;
   outline: 0;
 }
 
 .el-date-table td.today span {
-  color: $--color-primary;
+  color: $--theme;
 }
 
 .el-date-table td.current:not(.disabled) span {
   color: #fff;
-  background-color: $--color-primary;
+  background-color: $--theme;
 }
+
 .el-date-table td.available:hover {
-  color: $--color-primary;
+  color: $--theme;
 }
+
 .el-date-picker__header-label.active, .el-date-picker__header-label:hover {
-  color: $--color-primary;
+  color: $--theme;
 }
+
 .el-year-table td .cell:hover, .el-year-table td.current:not(.disabled) .cell {
-  color:$--color-primary;
+  color: $--theme;
 }
+
 .el-picker-panel__icon-btn:hover {
-  color: $--color-primary;
+  color: $--theme;
 }
+
 .el-month-table td .cell:hover, .el-month-table td.current:not(.disabled) .cell {
-  color: $--color-primary;
+  color: $--theme;
 }
+
+.el-select .el-input.is-focus .el-input__inner {
+  border-color: $--theme;
+}
+
+.el-select .el-input__inner:focus {
+  border-color: $--theme;
+}
+
+.el-select-dropdown__item.selected {
+  color: $--theme;
+}
+
+.el-breadcrumb__inner a:hover, .el-breadcrumb__inner.is-link:hover {
+  color: $--theme;
+}
+
+.el-breadcrumb__inner a, .el-breadcrumb__inner.is-link {
+  color: $--theme;
+}
+
+.el-breadcrumb__inner.is-link {
+  text-decoration: underline;
+}
+
+.el-breadcrumb__item:last-child .el-breadcrumb__inner, .el-breadcrumb__item:last-child .el-breadcrumb__inner a, .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover, .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover {
+  text-decoration: none;
+}
+

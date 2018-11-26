@@ -5,6 +5,7 @@ import user from './modules/user'
 import myhotels from './modules/myhotels'
 import breadcrumb from './modules/breadcrumb'
 import myHotelsPrice from './modules/myHotelsPrice'
+import aside from './modules/aside'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -13,6 +14,7 @@ const store = new Vuex.Store({
     myhotels,
     breadcrumb,
     myHotelsPrice,
+    aside
   },
   getters
 })

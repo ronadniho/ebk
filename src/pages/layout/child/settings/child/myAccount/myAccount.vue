@@ -63,6 +63,9 @@
         editing: false,
       }
     },
+    created(){
+      this.$store.commit('updateAside',this.$route.meta.aside);
+    },
     methods: {
       handleEdit() {
         this.editing = !this.editing;

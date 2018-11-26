@@ -1,27 +1,24 @@
 <template>
   <div class="layout">
-    <!--<top-head></top-head>-->
     <m-head>
       <div slot="admin" class="admin">
-        <span class="iconfont">&#xe653;</span>
-        <b>HEG-SWIFT012</b>
-        <span class="iconfont">&#xe638;</span>
+        <dropdown/>
       </div>
     </m-head>
     <el-container>
-      <left-aside></left-aside>
-      <right-main></right-main>
+      <left-aside/>
+      <right-main/>
     </el-container>
   </div>
 </template>
 
 <script>
   import {TopHead, LeftAside, RightMain} from './components'
-  import MHead from '@/components/mHead'
+  import {MHead, Dropdown} from '@/components'
 
   export default {
     name: "layout",
-    components: {TopHead, LeftAside, RightMain, MHead},
+    components: {TopHead, LeftAside, RightMain, MHead, Dropdown},
     data() {
       return {}
     }
@@ -34,19 +31,10 @@
     height: 100%;
     .admin {
       float: right;
-      height: 100%;
+      height: 45px;
       line-height: 45px;
       &:hover {
         cursor: pointer;
-      }
-      b {
-        color: #fff;
-        font-size: 18px;
-        margin: 0 20px 0 10px;
-        font-weight: 400;
-      }
-      .iconfont {
-        font-size: 24px;
       }
     }
     .el-container {

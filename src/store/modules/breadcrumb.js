@@ -1,25 +1,18 @@
 const breadcrumb = {
-    state:{
-        addHotels:[
-          {
-              href:'/myhotels',
-              title:'My hotels'
-          },
-        ],
-    },
-    mutations:{
-        GO_ADD:(state,data)=>{
-            state.addHotels = [state.addHotels[0]];
-            if(Array.isArray(data)){
-                state.addHotels = [...state.addHotels,...data];
-            }else{
-                state.addHotels.push(data);
-            }
-        },
-        GO_DELETE:(state,data)=>{
-            state.addHotels = [state.addHotels[0]];
-        }
+  state: {
+    model: 'myHotel',//模式
+    location: [
+      {
+        title: 'My hotels',
+        path: 'myHotel'
+      }
+    ],
+  },
+  mutations: {
+    updateLocation(state, data) {
+      state.location = [state.location[0],data];
     }
+  }
 }
 
 export default breadcrumb;

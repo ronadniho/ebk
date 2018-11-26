@@ -9,6 +9,8 @@ html, body {
 
 ul, ol {
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 p, h1, h2, h3, h4, h5, h6 {
@@ -27,8 +29,8 @@ button:hover{
 .btn-warning:not(.is-circle) {
   padding: 0 15px;
   height: 30px;
-  line-height: 30px;
-  border: 0;
+  line-height: 29px;
+  border:1px solid $--btn--warning;
   border-radius: 4px;
   box-sizing: border-box;
   color: #fff;
@@ -71,4 +73,11 @@ button:hover{
   box-sizing: border-box;
   color: $--btn--danger;
   background-color: #fff;
+}
+
+
+.btn-success-space:focus, .btn-success-space:hover {
+  border-color: $--btn--success;
+  background-color: #FFF;
+  color: $--btn--success;
 }

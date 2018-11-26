@@ -1,4 +1,4 @@
-// import {getPickerList,batchCreatePrice,batchUpdatePrice,} from '../../api/myHotels/price'
+import {getPickerList, batchCreatePrice,} from '@/api'
 // import {myHotelsMessage} from '../../utils/myHotelsMessage'
 const myHotelsPrice = {
   state: {
@@ -17,10 +17,12 @@ const myHotelsPrice = {
     UpdateActionType({commit}, query) {
       commit('UPDATE_ACTION_TYPE', query)
     },
-    GetNewPickerListObjs({commit}, {planId}) {
+    GetNewPickerListObjs({commit}, {planId, supplierName}) {
       return new Promise((resolve, reject) => {
-        getPickerList(planId).then(res => {
-          let callee = (data) => {
+        getPickerList(planId, {supplierName}).then(res => {
+          console.log(res);
+          let data = res.data;
+          if(data.list.length){
             let pickerList = data.list;
             let newPickerListObj = {};
             pickerList.map(val => {
@@ -34,8 +36,6 @@ const myHotelsPrice = {
               val._date = _date;
               val._sign = _year + '_' + _month;
             });
-            // console.log('数据')
-            // console.log(pickerList)
             for (let i = 0; i < pickerList.length; i++) {
               let keys = Object.keys(newPickerListObj);
               // console.log(keys)
@@ -57,7 +57,6 @@ const myHotelsPrice = {
             this.newPickerListObj = newPickerListObj;
             commit('GET_NEW_PICKER_LIST_OBJS', newPickerListObj);
           }
-          myHotelsMessage(res.status, res, callee);
         }).catch(err => {
           reject(err);
 

@@ -15,7 +15,7 @@
 <style scoped lang="scss">
   .mHead{
     width: 100%;
-    padding: 0 19px;
+    padding: 0 30px 0 19px;
     box-sizing: border-box;
     height: 45px;
     background-color: #009d79;

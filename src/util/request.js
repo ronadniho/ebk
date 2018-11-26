@@ -1,38 +1,40 @@
 import axios from 'axios'
-import { Loading } from 'element-ui';
+import {Loading} from 'element-ui';
+let baseURL;
 if (process.env.NODE_ENV != 'production') {
-  baseURL = '/ts';
+  baseURL = '/api';
 }
 else {
-  baseURL = '/'
+  baseURL = '/';
 }
 
-const service  = axios.create({
-  baseURL:baseURL,
-  headers:{
-    'Content-Type':'application/json'
+const service = axios.create({
+  baseURL: baseURL,
+  headers: {
+    'Content-Type': 'application/json'
   },
-  withCredentials:true,
-  timeout:60000
+  withCredentials: true,
+  timeout: 60000
 });
 
 
 service.interceptors.request.use(
-  request =>{
+  request => {
     return request;
   },
-  error=>{
-    return Promise.reject(error)
+  error => {
+    return Promise.reject(error);
   }
 );
 
 service.interceptors.response.use(
-  response=>{
+  response => {
     return response;
   },
-  error=>{
-    return Promise.reject(error)
+  error => {
+    return Promise.reject(error);
   }
 );
 
-export default service
+
+export default service;

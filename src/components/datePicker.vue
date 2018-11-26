@@ -105,14 +105,15 @@
             </el-row>
             <el-row class="edit-btn-group">
               <el-col :span="24">
-                <el-button
+                <button
                   class="btn-success-space"
+                  style="margin-right: 20px;"
                   @click="handleAddCancel(v,i)">Cancel
-                </el-button>
-                <el-button
+                </button>
+                <button
                   class="btn-warning"
                   @click="handleAddSubmit">Submit
-                </el-button>
+                </button>
               </el-col>
             </el-row>
 
@@ -254,10 +255,11 @@
         let tar = this.renderData;
         for (let j = 0; j < tar.length; j++) {
           if (i == j) {
-            this.$set(tar[j], 'isAdd', !tar[j].isAdd);
+            // this.$set(tar[j], 'isAdd', !tar[j].isAdd);
+            this.$set(tar[j], 'isAdd', false);
             this.$set(tar[j], 'isActive', !tar[j].isActive);
-            // this.$set(tar[j], 'isUpdate', !tar[j].isUpdate);
-            this.$set(tar[j], 'isUpdate', false);
+            this.$set(tar[j], 'isUpdate', !tar[j].isUpdate);
+            // this.$set(tar[j], 'isUpdate', false);
           }
           else {
             this.$set(tar[j], 'isAdd', false);
@@ -305,6 +307,7 @@
     height: 100%;
     padding: 0;
     font-size: 20px;
+    font-weight: 400;
   }
 
   tbody > tr {

@@ -1,13 +1,24 @@
 <template>
-  <el-container>
-    <el-header style="font-size: 12px">
+  <div class="add-price">
+    <el-header>
+      <el-breadcrumb separator="-">
+        <el-breadcrumb-item
+          v-for="(item,index) in breadcrumb"
+          :key="index"
+          :to="{ path: item.path }">
+          {{item.title}}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
     </el-header>
     <el-main>
 
-      <add-price-form @submitAddPrice="submitAddPrice"></add-price-form>
+      <add-price-form
+        @submitAddPrice="submitAddPrice"
+        :origin="addPriceForm.origin"
+      />
 
     </el-main>
-  </el-container>
+  </div>
 </template>
 
 <script>
@@ -15,24 +26,17 @@
 
   export default {
     components: {AddPriceForm},
-    // beforeRouteEnter(to, from, next) {
-    //   next((vm) => {
-    //     vm.fullPath = from.fullPath;
-    //   });
-    // },
-    // beforeRouteLeave(to, from, next) {
-    //   next();
-    // },
     data() {
       return {
         actionType: 'add',
         check: true,
         value13: [],
+        addPriceForm: {
+          origin: 'add'
+        },
         pickerOptions: {
           disabledDate: (time) => {
-            // new Date(time.getTime()).
             return
-            // return time.getTime() > new Date() || time.getTime() < new Date(2018, 9, 8);//注意是||不是&&
           }
         },
         pickerOptionsStart: {
@@ -72,9 +76,18 @@
     },
     created: function () {
       this.$store.dispatch('UpdateActionType', this.actionType);
+      this.$store.commit('updateAside', this.$route.meta.aside);
+      this.$store.commit('updateLocation', {
+        title: 'asdasdasd',
+      });
     },
     mounted: function () {
       window.sessionStorage.setItem('breadcrumb', -2);
+    },
+    computed: {
+      breadcrumb() {
+        return this.$store.state.breadcrumb.location;
+      }
     },
     methods: {
       submitAddPrice(val) {
@@ -124,10 +137,20 @@
   }
 </script>
 <style scoped lang="scss">
-  .el-container {
+  .add-price {
+    width: 100%;
     height: 100%;
-    padding: 10px;
-    box-sizing: border-box;
+  }
+
+  .el-header {
+    padding: 0;
+    font-size: 12px;
+    height: auto !important;
+    margin-bottom: 20px;
+  }
+
+  .el-main {
+    padding: 0;
   }
 
   // date component
